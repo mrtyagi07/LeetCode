@@ -1,0 +1,12 @@
+class Solution {
+    public int maxArea(int[] height) {
+        int leftEnd = 0, rightEnd = height.length - 1, maxWater = 0;
+        while (leftEnd < rightEnd) {
+ int currentHeightOfWater = Math.min(height[leftEnd], height[rightEnd]);   
+ maxWater=Math.max(maxWater, currentHeightOfWater * (rightEnd - leftEnd));
+            if (currentHeightOfWater == height[leftEnd]) leftEnd++;
+            else rightEnd--;
+        }
+        return maxWater;
+    }
+}
