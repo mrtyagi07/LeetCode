@@ -1,4 +1,5 @@
 # Write your MySQL query statement below
-select name from salesperson 
-where sales_id 
-not in (select o.sales_id from orders o, company c where o.com_id=c.com_id and c.name='RED');
+SELECT name FROM
+SalesPerson 
+WHERE sales_id not in(select sales_id FROM Orders
+                     where com_id=(select com_id from Company where name ='RED'))
