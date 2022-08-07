@@ -1,28 +1,32 @@
- class Solution {
+class Solution {
+    int mod = 1_000_000_007;
     public int countVowelPermutation(int n) {
-        int MOD = (int) (1e9 + 7);
-        long[][] dp = new long[n + 1][5];
-        for (int i = 0; i < 5; i++) {
-            dp[1][i] = 1;
+        // a can follow: e, i, u
+        // e can follow: a, i
+        // i can follow: e, o
+        // o can follow: i
+        // u can follow: i, o
+        
+        long a = 1;
+        long e = 1;
+        long i = 1;
+        long o = 1;
+        long u = 1;
+        
+        for (int k = 1; k < n; k++) {
+            long aa = a;
+            long ee = e;
+            long ii = i;
+            long oo = o;
+            long uu = u;
+            a = (ee + ii + uu) % mod;
+            e = (aa + ii) % mod;
+            i = (ee + oo) % mod;
+            o = ii % mod;
+            u = (ii + oo) % mod;
         }
-        /*
-            0: a
-            1: e
-            2: i
-            3: o
-            4: u
-         */
-        for (int i = 1; i < n; i++) {
-            dp[i+1][0] = (dp[i][4] + dp[i][1] + dp[i][2]) % MOD;
-            dp[i+1][1] = (dp[i][0] + dp[i][2]) % MOD;
-            dp[i+1][2] = (dp[i][3] + dp[i][1]) % MOD;
-            dp[i+1][3] = (dp[i][2]) % MOD;
-            dp[i+1][4] = (dp[i][2] + dp[i][3]) % MOD;
-        }
-
-        long ans = 0;
-        for (int i = 0; i < 5; i++)
-            ans = (ans + dp[n][i]) % MOD;
-        return (int) ans;
+        
+        long res = ((((a + e) % mod + i) % mod + o) % mod + u) % mod; 
+        return (int) res;
     }
 }
