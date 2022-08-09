@@ -1,29 +1,29 @@
 class Solution {
-       public int numFactoredBinaryTrees(int[] A) {
-         int M = 1000000007;
-         Arrays.sort(A);
-         long[] record = new long[A.length];
-         record[0] = 1;
-         Map<Integer, Integer> map = new HashMap<>();
-         map.put(A[0], 0);
-         for (int i = 1; i < A.length; i++) {
-         long sum = 1;
-         for (int j = 0; j < i; j++) {
-           if (A[i] % A[j] != 0) {
-             continue;
-         }
-    if (map.containsKey(A[i] / A[j])) {
-          sum += record[j] * record[map.get(A[i] / A[j])];
-       }
- }
-     record[i] = sum;
-     map.put(A[i], i);
-}
-     int result = 0;
-     for (long i : record) {
-     result += i % M;
-     result %= M;
-  }
-           return result;
-   }
+    public int numFactoredBinaryTrees(int[] arr) {
+        Arrays.sort(arr);
+        int n = arr.length, mod = 1_000_000_007;
+        long[] dp = new long[n];
+        long res = 0;
+        Map<Integer, Integer> idxs = new HashMap();
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+            for (int j = 0; j < i; j++) {
+                if (arr[j]*arr[j] > arr[i]) break;
+                if (arr[i] % arr[j] == 0 && idxs.containsKey(arr[i]/arr[j])) {
+                    if (arr[j]*arr[j] == arr[i]) {
+                        dp[i] += dp[j]*dp[j];
+                        dp[i] %= mod;
+                    }
+                    else {
+                        dp[i] += 2*dp[j]*dp[idxs.get(arr[i]/arr[j])];
+                        dp[i] %= mod;
+                    }
+                }
+            }
+            idxs.put(arr[i], i);
+            res += dp[i];
+            res %= mod;
+        }
+        return (int) res;
+    }
 }
