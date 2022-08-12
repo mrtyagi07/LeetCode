@@ -9,19 +9,8 @@
  */
 
 class Solution {
-    TreeNode lcaNode;
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        lcaNode = root;
-        lca(root , p , q);
-        return lcaNode;
-    }
-    public void lca(TreeNode node , TreeNode p , TreeNode q){
-        if(node.val>p.val && node.val>q.val)
-            lca(node.left , p , q);
-        else if(node.val<p.val && node.val<q.val)
-            lca(node.right , p , q);
-        else
-            lcaNode = node;
-        
-    }
+   public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    return (root.val - p.val) * (root.val - q.val) < 1 ? root :
+           lowestCommonAncestor(p.val < root.val ? root.left : root.right, p, q);
+}
 };
