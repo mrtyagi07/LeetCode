@@ -1,41 +1,30 @@
 class Solution {
-    private HashMap<String, Integer> wordCount = new HashMap<String, Integer>();
-    private int wordLength;
-    private int substringSize;
-    private int k;
-    
-    private boolean check(int i, String s) {
-        HashMap<String, Integer> remaining = new HashMap<>(wordCount);
-        int wordsUsed = 0;
+      public List<Integer> findSubstring(final String s, final String[] words) {
+        final int wordCount = words.length;
+        final int wordLength = words[0].length();
+        if (wordLength == 0 || wordCount == 0) return new ArrayList<>();
+
+        final Map<String, String> dictionary = new HashMap<>();
         
-        for (int j = i; j < i + substringSize; j += wordLength) {
-            String sub = s.substring(j, j + wordLength);
-            if (remaining.getOrDefault(sub, 0) != 0) {
-                remaining.put(sub, remaining.get(sub) - 1);
-                wordsUsed++;
-            } else {
-                break;
-            }
-        }
-        return wordsUsed == k;
-    }
-    
-    public List<Integer> findSubstring(String s, String[] words) {
-        int n = s.length();
-        k = words.length;
-        wordLength = words[0].length();
-        substringSize = wordLength * k;
-        
-        for (String word : words) {
-            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
-        }
-        
-        List<Integer> answer = new ArrayList<>();
-        for (int i = 0; i < n - substringSize + 1; i++) {
-            if (check(i, s)) {
-                answer.add(i);
-            }
-        }
-        return answer;
+		// Convert the words into a single (sorted) sentence
+        final String requiredString = Arrays.stream(words).sorted().map(word -> {
+            dictionary.putIfAbsent(word, Character.toString((char) (dictionary.size() + 65)));
+            return dictionary.get(word);
+        }).collect(Collectors.joining());
+
+        final int sentenceLength = wordCount * wordLength;
+        return IntStream.range(0, s.length() - sentenceLength + 1).filter(
+                i -> {
+                    final String sentence = s.substring(i, i + sentenceLength);
+
+					//Apply same conversion and sort, we've found an answer when it matches the required
+                    final String converted = IntStream.range(0, wordCount).mapToObj(j -> {
+                        final String token = sentence.substring(j * wordLength, j * wordLength + wordLength);
+                        return dictionary.getOrDefault(token, " ");
+                    }).sorted().collect(Collectors.joining());
+
+                    return converted.equals(requiredString);
+                }
+        ).boxed().collect(Collectors.toList());
     }
 }
