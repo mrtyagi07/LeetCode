@@ -1,30 +1,35 @@
 class Solution {
-      public List<Integer> findSubstring(final String s, final String[] words) {
-        final int wordCount = words.length;
-        final int wordLength = words[0].length();
-        if (wordLength == 0 || wordCount == 0) return new ArrayList<>();
-
-        final Map<String, String> dictionary = new HashMap<>();
+        public List<Integer> findSubstring(String s, String[] words) {
+        if (s == null || words == null || s.length() == 0 || words.length == 0) {
+            return new ArrayList<>();
+        }
+        Map<String, Integer> counts = new HashMap<>();
+        for (String word : words) {
+            counts.put(word, counts.getOrDefault(word, 0) + 1);
+        }
         
-		// Convert the words into a single (sorted) sentence
-        final String requiredString = Arrays.stream(words).sorted().map(word -> {
-            dictionary.putIfAbsent(word, Character.toString((char) (dictionary.size() + 65)));
-            return dictionary.get(word);
-        }).collect(Collectors.joining());
+        List<Integer> r = new ArrayList<>();
+        int sLen = s.length();
+        int num = words.length;
+        int wordLen = words[0].length();
 
-        final int sentenceLength = wordCount * wordLength;
-        return IntStream.range(0, s.length() - sentenceLength + 1).filter(
-                i -> {
-                    final String sentence = s.substring(i, i + sentenceLength);
-
-					//Apply same conversion and sort, we've found an answer when it matches the required
-                    final String converted = IntStream.range(0, wordCount).mapToObj(j -> {
-                        final String token = sentence.substring(j * wordLength, j * wordLength + wordLength);
-                        return dictionary.getOrDefault(token, " ");
-                    }).sorted().collect(Collectors.joining());
-
-                    return converted.equals(requiredString);
-                }
-        ).boxed().collect(Collectors.toList());
+        for (int i = 0; i < sLen - num * wordLen + 1; i++) {
+            String sub = s.substring(i, i + num * wordLen);
+            if (isConcat(sub, counts, wordLen)) {
+                r.add(i);
+            }
+        }
+        return r;
+    }
+    
+    /**
+     * */
+    private boolean isConcat(String sub, Map<String, Integer> counts, int wordLen) {
+        Map<String, Integer> seen = new HashMap<>();
+        for (int i = 0; i < sub.length(); i += wordLen) {
+            String sWord = sub.substring(i, i + wordLen);
+            seen.put(sWord, seen.getOrDefault(sWord, 0) + 1);
+        }
+        return seen.equals(counts);
     }
 }
