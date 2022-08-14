@@ -1,38 +1,16 @@
 class Solution {
- public int lengthOfLastWord(String s) {
-int n = s.length();
-int len=0;
-for(int i=n-1;i>=0;i--){
-int temp=s.charAt(i);
-if(temp>=65 && temp<=90 || temp>=97 && temp<=122){
-len++;
+    public int lengthOfLastWord(String s) {
+        int length = 0;
+		
+		// We are looking for the last word so let's go backward
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) != ' ') { // a letter is found so count
+                length++;
+            } else {  // it's a white space instead
+				//  Did we already started to count a word ? Yes so we found the last word
+                if (length > 0) return length;
+            }
+        }
+        return length;
+    }
 }
-else{
-if(len>0)
-return len;
-continue;
-}
-}
-return len;
- }
-}
-
-
-
-
-
-// class Solution {
-//     public int lengthOfLastWord(String s) {
-//        int count=0;
-//         char[] sArray = s.toCharArray();
-//          int len=sArray.length-1;
-//         while(sArray[len]==' ')
-//             len--;
-        
-//         while(len>-1  &&  sArray[len]!=' '){
-//             count++;
-//             len--;
-//         }
-//         return count;
-//     }
-// }
