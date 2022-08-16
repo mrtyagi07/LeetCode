@@ -1,20 +1,13 @@
 class Solution {
     public int firstUniqChar(String s) {
-        int index = -1;
-        
-        int[] chars = new int[125];
-        
-        for(char ch : s.toCharArray()){
-            chars[ch]++;
+        Map<Character, Integer> map = new HashMap<>();
+        for(char c : s.toCharArray()){
+            map.put(c, map.getOrDefault(c, 0)+1);
         }
-        int i = 0;
-        for(char ch : s.toCharArray()){
-            if(chars[ch] == 1){
+        for(int i=0; i<s.length(); i++){
+            if(map.get(s.charAt(i))==1)
                 return i;
-            }
-            i++;
         }
-        
-        return index;
+        return -1;
     }
 }
