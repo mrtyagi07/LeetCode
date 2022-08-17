@@ -1,19 +1,23 @@
 class Solution {
 public:
-    static inline const std::array<std::string, 26> morse{
-        ".-", "-...", "-.-.", "-..",".","..-.","--.","....", 
-        "..",".---","-.-",".-..","--","-.","---",".--.","--.-",
-        ".-.","...", "-", "..-","...-",".--","-..-","-.--","--..",
-    };
-    
-    int uniqueMorseRepresentations(std::vector<std::string>& words) {
-        std::unordered_set<std::string> transformations{};
-        for (const auto& word : words) {
-            std::string transf{};
-            for (const auto c : word) 
-                transf += morse[c - 'a'];
-            transformations.insert(std::move(transf));
+    string convert(string s,vector<string> &table){
+        string res;
+        for(auto i : s){
+            res += table[i - 'a'];
         }
-        return static_cast<int>(transformations.size());
+        
+        return res;
     }
-};
+    
+    int uniqueMorseRepresentations(vector<string>& words) {
+        vector<string> table = {".-","-...","-.-.","-..",".","..-.","--.","....",".."
+                                ,".---","-.-",".-..","--","-.","---",".--.","--.-",".-.",
+                                "...","-","..-","...-",".--","-..-","-.--","--.."};
+        
+        unordered_map<string,int> mp;
+        for(auto i : words){
+            mp[convert(i,table)]++;
+        }
+        return mp.size();
+    }
+};;
