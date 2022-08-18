@@ -1,26 +1,19 @@
 class Solution {
    public int minSetSize(int[] arr) {
-        int len = arr.length;
-        //step1: map(num -> freq)
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int maxFreq=0;
-        for(int num : arr ){
-            map.put(num, map.getOrDefault(num, 0)+1);
-            maxFreq = Math.max(maxFreq, map.get(num));
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int a:arr){
+            map.put(a,map.getOrDefault(a,0)+1);
         }
-        //step2 buck sort: int[](freq -> NUM[num1, num2, ...])
-        int[] freqArr = new int[maxFreq+1];
-        for(int freq : map.values()){
-            freqArr[freq]++;
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>((a,b)->(b-a));
+        for(int value:map.values()){
+            priorityQueue.offer(value);
         }
-        //step3:
-        int res=0, half=len/2, removed=0, curFreq=maxFreq;
-        while(removed<half){
-            while(freqArr[curFreq]==0) curFreq--;
-            freqArr[curFreq]--;
-            removed+=curFreq;
-            res++;
+        int sum = 0;
+        int count = 0;
+        while(sum < arr.length/2){
+            sum+=priorityQueue.poll();
+            count++;
         }
-        return res;
-    } 
+        return count;
+    }
 }
