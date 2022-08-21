@@ -1,34 +1,50 @@
 class Solution {
-public:
-        int can_replace(string &s, string &t , int pos){
-        for(int i=0;i<s.size();i++){
-            if(t[i+pos]!='?' && t[i+pos]!=s[i])return 0;
-        }
-        return 1;
-    }
-    int replace(string &s, string &t , int pos){
-        int replace=0;
-        for(int i=0;i<s.size();i++){
-            if(t[i+pos]!='?')t[i+pos]='?',replace++;
-        }
-        return replace;
-    }
-    vector<int> movesToStamp(string s, string t) {
-        vector<int>res,vis(t.size(),0);
-        int cnt=0;
-        while(cnt!=t.size()){
-            int change=0;
-            for(int i=0;i<=t.size()-s.size();i++){
-                if(vis[i]==0 && can_replace(s,t,i)){
-                    cnt+=replace(s,t,i);
-                    vis[i]=1;
-                    change=1;
-                    res.push_back(i);
+    public int[] movesToStamp(String stamp, String target) {
+        char[] S = stamp.toCharArray();
+        char[] T = target.toCharArray();
+        boolean[] visited = new boolean[T.length];
+        int stars=0;
+        
+        List<Integer> res = new ArrayList<>();
+        
+        while(stars<T.length){
+            boolean replaced = false;
+            for(int i=0;i<= T.length - S.length;i++){
+                if(!visited[i] && canReplace(T,i,S)){
+                    stars = replace(T,i,S.length,stars);
+                    replaced = true;
+                    visited[i] = true;
+                    res.add(i);
+                    
+                    if(stars == T.length)
+                        break;
                 }
             }
-            if(change==0)return {};
+            if(!replaced)
+                return new int[0];
         }
-        reverse(res.begin(),res.end());
-        return res;
+        
+        int ans[] = new int[res.size()];
+        for(int i=0;i<res.size();i++)
+            ans[i] = res.get(res.size()-i-1);
+        
+        return ans;
     }
-};
+    
+    private boolean canReplace(char[] T,int p,char[] S){
+        for(int i=0;i<S.length;i++)
+            if(T[i+p] != '*' && T[i+p] !=S[i])
+                return false;
+        return true;
+    }
+    
+    private int replace(char[] T, int p, int len, int count){
+        for(int i=0;i<len;i++)
+            if(T[p+i] != '*'){
+                T[p+i] = '*';
+                count++;
+            }
+        
+        return count;
+    }
+}
