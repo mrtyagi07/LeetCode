@@ -1,36 +1,30 @@
-
 class Solution {
     public boolean isPalindrome(String s) {
-        char[] ch = s.toCharArray(); // make it an array of chars
-        if (ch.length == 0)
-            return true;
-        return isPalRec(ch, 0, ch.length - 1);
-    }
+  int lo = 0, hi = s.length() - 1;
+  while (lo < hi) { 
     
-    // l for left index
-    // r for right index
-    private boolean isPalRec(char[] s, int l, int r) {
-        if (l >= r) 
-            return true;
-        
-        if (!isAlphaNum(s[l]))
-            return isPalRec(s, l + 1, r); // increment l
-        else if (!isAlphaNum(s[r]))
-            return isPalRec(s, l, r - 1); // decrement r
+    while (lo < hi && !isValid(s.charAt(lo))) lo += 1;
+    
+    while (lo < hi && !isValid(s.charAt(hi))) hi -= 1;
+   
+    if (lo < hi) {
+      if (isCharDiff(s.charAt(lo), s.charAt(hi))) return false;
+    }
+    lo += 1; hi -= 1; 
+  }
+  return true;
+}
 
-        if ((s[l] | 32) != (s[r] | 32)) // deals with upper vs lowercase 
-            return false;
-        else 
-            return isPalRec(s, l + 1, r - 1); // if same, increment l and decrement r
-    }
+private boolean isValid(char ch) {
+  return Character.isLetterOrDigit(ch);
+}
+
+private boolean isCharDiff(char ch1, char ch2) {
+  return Character.toLowerCase(ch1) != Character.toLowerCase(ch2);
+}
+       
+       
     
-    private boolean isAlphaNum(char c) {
-        return (
-            (c <= 'z' && c >= 'a') ||
-            (c <= 'Z' && c >= 'A') ||
-            (c <= '9' && c >= '0')
-        );
-    }
 }
 
 
