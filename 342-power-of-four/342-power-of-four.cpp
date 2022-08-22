@@ -1,6 +1,20 @@
 class Solution {
+private: 
+    bool solve(double n){
+        
+        if(n == 1) return true;
+        
+        if(n <= 0) return false;
+        
+        return solve(n/4);
+    }
 public:
     bool isPowerOfFour(int n) {
-        return n>0&&(floor(log(n)/log(4))==ceil(log(n)/log(4)));
+        
+     if(n<0)
+         return false;
+        
+        
+     return solve(n); 
     }
 };
