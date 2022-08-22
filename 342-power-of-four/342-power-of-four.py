@@ -1,20 +1,4 @@
-class Solution {
-private: 
-    bool solve(double n){
+class Solution:
+    def isPowerOfFour(self, n: int) -> bool:
+        return n > 0 and log(n, 4).is_integer()
         
-        if(n == 1) return true;
-        
-        if(n <= 0) return false;
-        
-        return solve(n/4);
-    }
-public:
-    bool isPowerOfFour(int n) {
-        
-     if(n<0)
-         return false;
-        
-        
-     return solve(n); 
-    }
-};
