@@ -1,15 +1,15 @@
 class Solution {
 public:
-    bool canConstruct(string ransomNote, string magazine) {
-        if (ransomNote.length() > magazine.length()) return false;
-        int count[26] = {0};
-        for(char ch : magazine)
-            count[ch - 'a']++;
-        
-        for(char ch : ransomNote)
-            if(count[ch - 'a']-- <= 0)
-                return false;
-        
-        return true;
+    bool canConstruct(string a, string b) {
+        int h[26] = {0};
+        for (char &c: b) {
+            ++h[c -'a'];
+        }
+        for (char &c: a) {
+            if (h[c-'a'] == 0) 
+                return 0;
+            --h[c-'a'];
+        }
+        return 1;
     }
 };
