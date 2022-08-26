@@ -1,16 +1,24 @@
 class Solution {
-    public boolean reorderedPowerOf2(int N) {
-        char[] a1 = String.valueOf(N).toCharArray();
-        Arrays.sort(a1);
-        String s1 = new String(a1);
+    public boolean reorderedPowerOf2(int n) {
+         int[] countNumber=countDigits(n);
+        int num=1;
         
-        for (int i = 0; i < 31; i++) {
-            char[] a2 = String.valueOf((int)(1 << i)).toCharArray();
-            Arrays.sort(a2);
-            String s2 = new String(a2);
-            if (s1.equals(s2)) return true;
+        for(int i=0;i<31;i++){
+            if(Arrays.equals(countNumber,countDigits(num))){
+                return true;
+            }
+            num=num<<1;
         }
         
-        return false;
+        return false;  
+    }
+    
+     int[] countDigits(int N){
+        int[] arr = new int[10];
+        while(N>0){
+            arr[N%10]++;
+            N/=10;
+        }
+        return arr;
     }
 }
