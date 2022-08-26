@@ -1,18 +1,13 @@
 class Solution {
 public:
-    bool reorderedPowerOf2(int n) {
-string str = to_string(n);
-sort(str.begin(), str.end());
-int k =30;
-int i = 0;
-while(k--){
-	int num = (1<<i);
-	i++;
-	string nums = to_string(num);
-	sort(nums.begin(), nums.end());
-	if(str == nums){
-		return true;
+    bool reorderedPowerOf2(int N) {
+	string n = to_string(N);
+	sort(begin(n), end(n));
+	for(int i = 0, powOf2 = 1; i < 30; i++, powOf2 <<= 1){
+		string pow2_str = to_string(powOf2);
+		sort(begin(pow2_str), end(pow2_str));
+		if(n == pow2_str) return true;  
 	}
-}return false;
- }
+	return false;
+}
 };
