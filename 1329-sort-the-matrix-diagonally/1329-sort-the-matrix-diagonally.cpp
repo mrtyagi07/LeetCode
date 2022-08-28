@@ -1,47 +1,25 @@
 class Solution {
 public:
-    vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
-        int n=mat.size();
-        int m=mat[0].size();
-        int i=n-1,j=0;
-        int cnt=0;
-        while(i>=0){
-            j=0;
-            vector<int> v;
-            for(int k=i;k<n and j<m;k++,j++){
-                v.push_back(mat[k][j]);
+    vector<vector<int>> diagonalSort(vector<vector<int>>& mat)
+    {
+        int row=mat.size();
+        int col=mat[0].size();
+        unordered_map<int,priority_queue<int,vector<int>,greater<int>>>mp;
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                mp[i-j].push(mat[i][j]);
             }
-            
-            sort(v.begin(),v.end());
-            int l=0;
-            j=0;
-            for(int k=i;k<n and j<m;k++,j++){
-                mat[k][j]=v[l];
-                l++;
-            }
-            i--;
         }
-        
-        while(++cnt<m){
-            j=cnt;
-            i=0;
-            vector<int> v;
-            for(;i<n and j<m; i++,j++){
-                v.push_back(mat[i][j]);
+        for(int i=0;i<row;i++)
+        {
+            for(int j=0;j<col;j++)
+            {
+                mat[i][j]=mp[i-j].top();
+                mp[i-j].pop();
             }
-            
-            sort(v.begin(),v.end());
-            i=0,j=cnt;
-            int l=0;
-            
-            for(;i<n and j<m;i++,j++){
-                mat[i][j]=v[l];
-                l++;
-            }
-            
         }
-        
-        
-        return mat;
+        return mat ;     
     }
 };
