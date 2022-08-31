@@ -1,42 +1,27 @@
 class Solution {
 public:
-    void dfs(int i, int j,vector<vector<bool>>&arr,vector<vector<int>>& heights){
-        //base case
-        if(arr[i][j]==1)
-            return;
-        
-        arr[i][j]=1;
-        if(i-1>=0 and heights[i][j]<=heights[i-1][j])
-            dfs(i-1,j,arr,heights);
-        if(i+1<arr.size() and heights[i][j]<=heights[i+1][j])
-            dfs(i+1,j,arr,heights);
-        if(j-1>=0 and heights[i][j]<=heights[i][j-1])
-            dfs(i,j-1,arr,heights);
-        if(j+1<arr[0].size() and heights[i][j]<=heights[i][j+1])
-            dfs(i,j+1,arr,heights);
-    }
-    void solve(int x, int y,vector<vector<bool>>&arr,vector<vector<int>>& heights){
-        for(int i=0;i<arr.size();i++){
-            for(int j=0;j<arr[0].size();j++){
-                if(i==x || j==y)
-                    dfs(i,j,arr,heights);
-            }
-        }
-    }
-    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
-        int row=heights.size();
-        int col=heights[0].size();
-        vector<vector<bool>>pacific(row,vector<bool>(col,0));
-        vector<vector<bool>>atlantic(row,vector<bool>(col,0));
-        vector<vector<int>>ans;
-        solve(0,0,pacific,heights);
-        solve(row-1,col-1,atlantic,heights);
-        for(int i=0;i<row;i++){
-            for(int j=0;j<col;j++){
-                if(pacific[i][j] and atlantic[i][j])
-                    ans.push_back({i,j});
-            }
-        }
+    int m, n;
+	// denotes cells reachable starting from atlantic and pacific edged cells respectively
+    vector<vector<bool> > atlantic, pacific;
+	vector<vector<int> > ans;    
+    vector<vector<int> > pacificAtlantic(vector<vector<int>>& mat) {
+        if(!size(mat)) return ans;
+        m = size(mat), n = size(mat[0]);
+        atlantic = pacific = vector<vector<bool> >(m, vector<bool>(n, false));
+		// perform dfs from all edge cells (ocean-connected cells)
+        for(int i = 0; i < m; i++) dfs(mat, pacific, i, 0), dfs(mat, atlantic, i, n - 1);
+        for(int i = 0; i < n; i++) dfs(mat, pacific, 0, i), dfs(mat, atlantic, m - 1, i);             
         return ans;
+    }
+    void dfs(vector<vector<int> >& mat, vector<vector<bool> >& visited, int i, int j){        
+        if(visited[i][j]) return;
+        visited[i][j] = true;
+		// if cell reachable from both the oceans, insert into final answer vector
+        if(atlantic[i][j] && pacific[i][j]) ans.push_back(vector<int>{i, j});    
+		// dfs from current cell only if height of next cell is greater
+/*⬇️*/  if(i + 1 <  m && mat[i + 1][j] >= mat[i][j]) dfs(mat, visited, i + 1, j); 
+/*⬆️*/  if(i - 1 >= 0 && mat[i - 1][j] >= mat[i][j]) dfs(mat, visited, i - 1, j);
+/*➡️*/  if(j + 1 <  n && mat[i][j + 1] >= mat[i][j]) dfs(mat, visited, i, j + 1); 
+/*⬅️*/  if(j - 1 >= 0 && mat[i][j - 1] >= mat[i][j]) dfs(mat, visited, i, j - 1);
     }
 };
