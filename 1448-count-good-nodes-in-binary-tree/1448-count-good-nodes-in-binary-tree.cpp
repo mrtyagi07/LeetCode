@@ -11,12 +11,22 @@
  */
 class Solution {
  public:
-  int goodNodes(TreeNode* root, int maxi = INT_MIN) {
-    if (!root)
-      return 0;
-    const int newMax = max(maxi, root->val);
-    return (root->val >= maxi) +
-           goodNodes(root->left, newMax) +
-           goodNodes(root->right, newMax);
-  }
+ void helper(TreeNode* root, int prev, int &count)
+{
+    if(root==NULL) return;
+    if(root->val>=prev)       // if current node value is greater than prev value  update prev value and increase count
+    {
+        count++;
+        prev= root->val;
+    }
+    helper(root->left,prev,count);
+    helper(root->right,prev,count);
+    
+}
+int goodNodes(TreeNode* root) {
+    int count=0;
+    helper(root,INT_MIN,count);
+    return count;
+    
+}
 };
