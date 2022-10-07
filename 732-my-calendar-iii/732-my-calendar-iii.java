@@ -1,11 +1,18 @@
 class MyCalendarThree {
-    private TreeMap<Integer, Integer> timeline = new TreeMap<>();
-    public int book(int s, int e) {
-        timeline.put(s, timeline.getOrDefault(s, 0) + 1); // 1 new event will be starting at [s]
-        timeline.put(e, timeline.getOrDefault(e, 0) - 1); // 1 new event will be ending at [e];
-        int ongoing = 0, k = 0;
-        for (int v : timeline.values())
-            k = Math.max(k, ongoing += v);
+    TreeMap<Integer,Integer> tm;
+
+    public MyCalendarThree() {
+        tm = new TreeMap<>();
+    }
+    
+    public int book(int start, int end) {
+        tm.put(start, tm.getOrDefault(start,0)+1);
+        tm.put(end, tm.getOrDefault(end,0)-1);
+        int k =0;
+        int ongoing =0;
+        for(int val:tm.values()){
+            k= Math.max(k,ongoing+=val);
+        }
         return k;
     }
 }
