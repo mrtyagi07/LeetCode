@@ -2,24 +2,22 @@
  * @param {string[]} arr
  * @return {number}
  */
-var maxLength = function(arr) {
-    const set = new Set(['']);
-    let max = 0;
-    let str;
-    
-    for(let i = 0; i < arr.length; i++) {
-        const values = [...set.values()];
+var maxLength = function (arr) {
+    let res = 0;
+
+    let solve = (start, curr) => {
+        if (curr.length !== new Set(curr.split('')).size) {
+            return;
+        }
         
-        for(let j = 0; j < values.length; j++) {     
-            str = `${values[j]}${arr[i]}`;
-            set.add(str);
-            let newStr = [...new Set(str).values()].join('');
-            
-            if (str === newStr) {
-                max = Math.max(str.length, max);    
-            }            
+        res = Math.max(res, curr.length);
+
+        for (let i = start; i < arr.length; i++) {
+            solve(i + 1, `${curr}${arr[i]}`);
         }
     }
-    
-    return max;
+
+    solve(0, '');
+
+    return res;
 };
